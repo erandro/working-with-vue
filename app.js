@@ -1,26 +1,27 @@
-Vue.component("resident-component", {
-    props: ["resident"],
+Vue.component("quote-component", {
+    props: ["quote"],
     filters: {
-        fullName(val) {
-            return `${val.first} ${val.last}`
+        filterTheme(theme) {
+            switch (theme) {
+                case "movie":
+
+                    break;
+                case "game":
+
+                    break;
+                default:
+                    break;
+            }
         }
     },
     methods: {
-        incrementAge(name) {
-            name.age++
-        },
-        decrementAge(name) {
-            name.age++
-        }
+
     },
     template: `
     <div>
-        <h4>Name: {{resident | fullName}}</h4>
-        <h4>Age: {{resident.age}}</h4>
-        <button v-on:click="incrementAge(resident)">+</button>
-        <button v-on:click="decrementAge(resident)">-</button>
-        <input v-model="resident.first" />
-        <input v-model="resident.last" />
+        <h4>Quote: {{quote.quote}}</h4>
+        <h4>Theme: {{quote.theme}}</h4>
+        <br>
     </div>
     `
 });
@@ -28,21 +29,19 @@ Vue.component("resident-component", {
 const app = new Vue({
     el: "#firstDiv",
     data: {
-        residents: [
-            {
-                first: "Eran",
-                last: "Dromy",
-                age: 32
-            },
-            {
-                first: "Natalie",
-                last: "Schneider",
-                age: 31
-            }
-        ]
+        quotes: []
+    },
+    mounted() {
+        fetch("https://gist.githubusercontent.com/benchprep/dffc3bffa9704626aa8832a3b4de5b27/raw/quotes.json")
+            .then(response => response.json())
+            .then((data) => {
+                this.quotes = data;
+            })
     },
     template: `
     <div>
-        <resident-component v-for="item in residents" v-bind:resident="item" />
+        <button>movie</button>
+        <button>game</button>
+        <quote-component v-for="item in quotes" v-bind:quote="item" />
     </div>`
 })
